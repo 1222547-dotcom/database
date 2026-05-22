@@ -57,7 +57,7 @@ public class ProductManagementController {
             dashboard.show(stage);
         });
         
-        Label title = new Label("📦 Product Management");
+        Label title = new Label(" Product Management");
         title.setFont(Font.font("Arial", FontWeight.BOLD, 22));
         title.setTextFill(Color.WHITE);
         title.setPadding(new Insets(0, 0, 0, 20));
@@ -135,9 +135,9 @@ public class ProductManagementController {
         
         // Buttons
         Button btnAdd = createActionButton("➕ Add", "#27ae60");
-        Button btnUpdate = createActionButton("✏ Update", "#f39c12");
-        Button btnDelete = createActionButton("🗑 Delete", "#e74c3c");
-        Button btnClear = createActionButton("🔄 Clear", "#95a5a6");
+        Button btnUpdate = createActionButton(" Update", "#f39c12");
+        Button btnDelete = createActionButton(" Delete", "#e74c3c");
+        Button btnClear = createActionButton(" Clear", "#95a5a6");
         
         btnAdd.setOnAction(e -> handleAdd());
         btnUpdate.setOnAction(e -> handleUpdate());
@@ -174,12 +174,12 @@ public class ProductManagementController {
         // Search bar
         HBox searchBox = new HBox(10);
         txtSearch = new TextField();
-        txtSearch.setPromptText("🔍 Search by name, brand, or model...");
+        txtSearch.setPromptText(" Search by name, brand, or model...");
         txtSearch.setStyle("-fx-background-radius: 6; -fx-border-radius: 6; -fx-border-color: #ddd; -fx-padding: 8;");
         HBox.setHgrow(txtSearch, Priority.ALWAYS);
         
         Button btnSearch = createActionButton("Search", "#3498db");
-        Button btnRefresh = createActionButton("🔄 Refresh", "#16a085");
+        Button btnRefresh = createActionButton(" Refresh", "#16a085");
         
         btnSearch.setOnAction(e -> handleSearch());
         btnRefresh.setOnAction(e -> {
