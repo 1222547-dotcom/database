@@ -1,199 +1,181 @@
 package phase3;
 
-import atlantafx.base.theme.PrimerLight;
-import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.chart.AreaChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import phase3.User;
-
-import java.util.List;
 
 public class OwnerDashboardController {
 
-    private User currentUser;
+    private User currentSessionUser;
 
     public OwnerDashboardController(User user) {
-        this.currentUser = user;
+        this.currentSessionUser = user;
     }
 
     public void show(Stage stage) {
-        BorderPane root = new BorderPane();
-        root.setStyle("-fx-background-color: #f5f6fa;");
-        Application.setUserAgentStylesheet(new PrimerLight().getUserAgentStylesheet());
+        BorderPane coreLayout = new BorderPane();
+        coreLayout.setStyle("-fx-background-color: #f4f5fa;");
 
-        HBox header = new HBox();
-        header.setPadding(new Insets(20, 30, 20, 30));
-        header.setAlignment(Pos.CENTER_LEFT);
-        header.setStyle("-fx-background-color: linear-gradient(to right, #667eea, #764ba2);");
+        HBox topNavbar = new HBox();
+        topNavbar.setPadding(new Insets(12, 30, 12, 24));
+        topNavbar.setAlignment(Pos.CENTER_LEFT);
+        topNavbar.setStyle("-fx-background-color: #ffffff; -fx-border-color: #ebedf2; -fx-border-width: 0 0 1 0;");
 
-        Label headerTitle = new Label("📱 iCell Management System");
-        headerTitle.setFont(Font.font("Arial", FontWeight.BOLD, 22));
-        headerTitle.setTextFill(Color.WHITE);
+        StackPane logoAnchor = Logo.createRealLogoHeader(100);
+
+        Label lblGreeting = new Label("System Workspace Dashboard");
+        lblGreeting.setFont(Font.font(Logo.GLOBAL_FONT, FontWeight.BOLD, 15));
+        lblGreeting.setStyle("-fx-text-fill: #2c1c3d; -fx-padding: 0 0 0 25;");
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        Label userInfo = new Label("👤 " + currentUser.getUsername() + " (" + currentUser.getUserType() + ")");
-        userInfo.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-        userInfo.setTextFill(Color.WHITE);
+        Button btnLogout = new Button("Sign Out");
+        btnLogout.setFont(Font.font(Logo.GLOBAL_FONT, FontWeight.BOLD, 12));
+        btnLogout.setStyle("-fx-background-color: #ea5455; -fx-text-fill: white; -fx-background-radius: 6px; -fx-cursor: hand;");
+        btnLogout.setOnAction(e -> new LoginController().show(stage));
 
-        Button btnLogout = new Button("Logout");
-        btnLogout.setStyle("-fx-background-color: rgba(255,255,255,0.2); -fx-text-fill: white; "
-                        + "-fx-padding: 8 20; -fx-background-radius: 5; -fx-cursor: hand; -fx-font-weight: bold;");
-        btnLogout.setOnAction(e -> {
-            LoginController login = new LoginController();
-            login.show(stage);
-        });
+        topNavbar.getChildren().addAll(logoAnchor, lblGreeting, spacer, btnLogout);
+        coreLayout.setTop(topNavbar);
 
-        header.getChildren().addAll(headerTitle, spacer, userInfo, new Label("  "), btnLogout);
+        ScrollPane mainScrollPane = new ScrollPane();
+        mainScrollPane.setFitToWidth(true);
+        mainScrollPane.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
 
-        ScrollPane scroll = new ScrollPane();
-        scroll.setFitToWidth(true);
-        scroll.setStyle("-fx-background: #f5f6fa; -fx-background-color: #f5f6fa;");
+        VBox scrollContainer = new VBox(30);
+        scrollContainer.setPadding(new Insets(30));
 
-        VBox content = new VBox(25);
-        content.setPadding(new Insets(30));
+        // RESTORED: Main dashboard summary envelope color configuration matches login view
+        VBox dataAnalysisEnvelope = new VBox(15);
+        dataAnalysisEnvelope.setPadding(new Insets(24));
+        dataAnalysisEnvelope.setStyle("-fx-background-color: " + Logo.PURPLE_GRADIENT + " -fx-background-radius: 18px;");
 
-        Label welcome = new Label("Welcome back, " +
-            (currentUser.getFullName().trim().isEmpty() ? currentUser.getUsername() : currentUser.getFullName()) + "! 👋");
-        welcome.setFont(Font.font("Arial", FontWeight.BOLD, 26));
-        welcome.setTextFill(Color.web("#2c3e50"));
+        Label lblMetricsHeading = new Label("REALTIME PERFORMANCE & DATA OVERVIEW");
+        lblMetricsHeading.setFont(Font.font(Logo.GLOBAL_FONT, FontWeight.BOLD, 12));
+        lblMetricsHeading.setStyle("-fx-text-fill: #ffffff; -fx-letter-spacing: 0.8px;");
 
-        Label subtitle = new Label("Here's what's happening in your system today");
-        subtitle.setFont(Font.font("Arial", 14));
-        subtitle.setTextFill(Color.web("#7f8c8d"));
+        GridPane analyticsGrid = new GridPane();
+        analyticsGrid.setHgap(20);
+        analyticsGrid.setVgap(20);
 
-        Label statsTitle = new Label("📊 Statistics Overview");
-        statsTitle.setFont(Font.font("Arial", FontWeight.BOLD, 18));
-        statsTitle.setTextFill(Color.web("#2c3e50"));
-
-        HBox statsRow = new HBox(20);
-        statsRow.getChildren().addAll(
-            createStatCard("💰", "Total Revenue", "425,000 ILS", "#3498db"),
-            createStatCard("📦", "Stock Value", "150,000 ILS", "#2ecc71"),
-            createStatCard("📊", "Monthly Sales", "95,000 ILS", "#e67e22"),
-            createStatCard("⚠️", "Low Stock", "3 Items", "#e74c3c")
+        VBox analysisBulletsBox = new VBox(12);
+        analysisBulletsBox.getChildren().addAll(
+                createSummaryBullet("TOTAL WHOLESALE REVENUE", "425,000 ILS", "+14% Dynamic Growth"),
+                createSummaryBullet("LIVE CATALOG STOCK EVALUATION", "150,000 ILS", "Warehouse Node Balanced"),
+                createSummaryBullet("MONTHLY WHOLESALE TRADE VOLUME", "95,000 ILS", "Stable Sector Target"),
+                createSummaryBullet("CRITICAL STOCK FLAG ALERTS", "3 Items Flagged", "Immediate Restock Required")
         );
 
-        Label menuTitle = new Label("🎯 Main Menu");
-        menuTitle.setFont(Font.font("Arial", FontWeight.BOLD, 18));
-        menuTitle.setTextFill(Color.web("#2c3e50"));
+        VBox chartContainerBox = new VBox(10);
+        chartContainerBox.setPadding(new Insets(15));
+        chartContainerBox.setStyle("-fx-background-color: #faf9f6; -fx-background-radius: 14px;");
 
-        GridPane menu = new GridPane();
-        menu.setHgap(20);
-        menu.setVgap(20);
+        Label lblChartTitle = new Label("ANNUAL WHOLESALE REVENUE TREND ANALYSIS");
+        lblChartTitle.setFont(Font.font(Logo.GLOBAL_FONT, FontWeight.BOLD, 11));
+        lblChartTitle.setStyle("-fx-text-fill: #4c4e52;");
 
-        menu.add(createMenuButton("📦", "Products", "Manage products inventory", "#3498db", () -> openProducts(stage)), 0, 0);
-        menu.add(createMenuButton("👥", "Staff", "Manage employees", "#9b59b6", () -> showAlert("Coming Soon", "Staff Management")), 1, 0);
-        menu.add(createMenuButton("📄", "Invoices", "View & manage invoices", "#e67e22", () -> showAlert("Coming Soon", "Invoices")), 2, 0);
-        menu.add(createMenuButton("🏢", "Warehouses", "Manage warehouses", "#1abc9c", () -> showAlert("Coming Soon", "Warehouses")), 3, 0);
+        AreaChart<Number, Number> performanceChart = buildBusinessChart();
+        chartContainerBox.getChildren().addAll(lblChartTitle, performanceChart);
 
-        menu.add(createMenuButton("💾", "Suppliers", "Manage suppliers", "#34495e", () -> showAlert("Coming Soon", "Suppliers")), 0, 1);
-        menu.add(createMenuButton("🏪", "Shops", "Client shops", "#16a085", () -> showAlert("Coming Soon", "Shops")), 1, 1);
-        menu.add(createMenuButton("📊", "Reports", "View analytics", "#2980b9", () -> showAlert("Coming Soon", "Reports")), 2, 1);
-        menu.add(createMenuButton("⚙️", "Settings", "System settings", "#7f8c8d", () -> showAlert("Coming Soon", "Settings")), 3, 1);
+        ColumnConstraints col1 = new ColumnConstraints(); col1.setPercentWidth(35);
+        ColumnConstraints col2 = new ColumnConstraints(); col2.setPercentWidth(65);
+        analyticsGrid.getColumnConstraints().addAll(col1, col2);
+        analyticsGrid.add(analysisBulletsBox, 0, 0);
+        analyticsGrid.add(chartContainerBox, 1, 0);
 
-        content.getChildren().addAll(welcome, subtitle, statsTitle, statsRow, menuTitle, menu);
-        scroll.setContent(content);
+        dataAnalysisEnvelope.getChildren().addAll(lblMetricsHeading, analyticsGrid);
 
-        root.setTop(header);
-        root.setCenter(scroll);
+        VBox interfaceEnvelope = new VBox(15);
+        Label lblMenuHeading = new Label("ENTERPRISE ARCHITECTURE INTERFACES");
+        lblMenuHeading.setFont(Font.font(Logo.GLOBAL_FONT, FontWeight.BOLD, 12));
+        lblMenuHeading.setStyle("-fx-text-fill: #8a8d93; -fx-letter-spacing: 0.8px;");
 
-        Scene scene = new Scene(root, 1200, 750);
+        GridPane routingGrid = new GridPane();
+        routingGrid.setHgap(15);
+        routingGrid.setVgap(15);
+
+        Button btnProductCatalog = createModuleMenuButton("Product Catalog", "Trace stock updates and ledger metrics");
+
+        // FIXED: Click behavior immediately loads live database collections upon moving views
+        btnProductCatalog.setOnAction(e -> {
+            ProductDAO dao = new ProductDAO();
+            ProductManagementController prodView = new ProductManagementController(currentSessionUser, dao.getAllProducts());
+            prodView.show(stage);
+        });
+
+        routingGrid.add(btnProductCatalog, 0, 0);
+        routingGrid.add(createModuleMenuButton("Staff Clearances", "Manage secure profile access parameters"), 1, 0);
+        routingGrid.add(createModuleMenuButton("Billing Sheets", "Generate wholesale invoice distribution logs"), 2, 0);
+        routingGrid.add(createModuleMenuButton("Depot Dependencies", "Monitor storage network nodes and locations"), 3, 0);
+
+        for(int i=0; i<4; i++) {
+            ColumnConstraints cc = new ColumnConstraints(); cc.setPercentWidth(25);
+            routingGrid.getColumnConstraints().add(cc);
+        }
+
+        interfaceEnvelope.getChildren().addAll(lblMenuHeading, routingGrid);
+        scrollContainer.getChildren().addAll(dataAnalysisEnvelope, interfaceEnvelope);
+
+        mainScrollPane.setContent(scrollContainer);
+        coreLayout.setCenter(mainScrollPane);
+
+        Scene scene = new Scene(coreLayout, 1400, 880);
         stage.setScene(scene);
-        stage.setTitle("iCell - " + currentUser.getUserType() + " Dashboard");
         stage.show();
     }
 
-    private VBox createStatCard(String icon, String title, String value, String color) {
-        VBox card = new VBox(8);
-        card.setPadding(new Insets(20));
-        card.setPrefWidth(250);
-        card.setStyle("-fx-background-color: white; -fx-background-radius: 12; "
-                    + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 4); "
-                    + "-fx-border-color: " + color + "; -fx-border-width: 0 0 0 4; -fx-border-radius: 12;");
-        HBox.setHgrow(card, Priority.ALWAYS);
+    private VBox createSummaryBullet(String topHeader, String mainValue, String subIndicator) {
+        VBox box = new VBox(4);
+        box.setPadding(new Insets(14, 18, 14, 18));
+        box.setStyle("-fx-background-color: #faf9f6; -fx-background-radius: 12px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.02), 8, 0, 0, 3);");
 
-        Label iconLbl = new Label(icon);
-        iconLbl.setFont(Font.font(24));
+        Label h = new Label(topHeader); h.setFont(Font.font(Logo.GLOBAL_FONT, FontWeight.BOLD, 10)); h.setStyle("-fx-text-fill: #726384;");
+        Label v = new Label(mainValue); v.setFont(Font.font(Logo.GLOBAL_FONT, FontWeight.BOLD, 18)); v.setStyle("-fx-text-fill: #662D91;");
+        Label s = new Label(subIndicator); s.setFont(Font.font(Logo.GLOBAL_FONT, FontWeight.NORMAL, 11)); s.setStyle("-fx-text-fill: " + (topHeader.contains("ALERT") ? "#ea5455" : "#1c7a43") + ";");
 
-        Label titleLbl = new Label(title);
-        titleLbl.setFont(Font.font("Arial", 12));
-        titleLbl.setTextFill(Color.web("#7f8c8d"));
-
-        Label valueLbl = new Label(value);
-        valueLbl.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-        valueLbl.setTextFill(Color.web(color));
-
-        card.getChildren().addAll(iconLbl, titleLbl, valueLbl);
-        return card;
+        box.getChildren().addAll(h, v, s);
+        return box;
     }
 
-    private VBox createMenuButton(String icon, String title, String desc, String color, Runnable action) {
-        VBox btn = new VBox(8);
-        btn.setAlignment(Pos.CENTER);
-        btn.setPadding(new Insets(25));
-        btn.setPrefSize(220, 130);
-        btn.setStyle("-fx-background-color: white; -fx-background-radius: 12; "
-                  + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 4); "
-                  + "-fx-cursor: hand;");
+    private Button createModuleMenuButton(String title, String subtitle) {
+        Button btn = new Button();
+        btn.setMaxWidth(Double.MAX_VALUE);
+        btn.setPrefHeight(95);
+        btn.setStyle("-fx-background-color: #ffffff; -fx-border-color: #ebedf2; -fx-border-width: 1px; -fx-border-radius: 12px; -fx-background-radius: 12px; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-padding: 16;");
 
-        Label iconLbl = new Label(icon);
-        iconLbl.setFont(Font.font(40));
+        VBox layout = new VBox(4);
+        Label mainConstraints = new Label(title); mainConstraints.setFont(Font.font(Logo.GLOBAL_FONT, FontWeight.BOLD, 14)); mainConstraints.setStyle("-fx-text-fill: #2c1c3d;");
+        Label subConstraints = new Label(subtitle); subConstraints.setFont(Font.font(Logo.GLOBAL_FONT, FontWeight.NORMAL, 12)); subConstraints.setStyle("-fx-text-fill: #8a8d93;");
+        layout.getChildren().addAll(mainConstraints, subConstraints);
 
-        Label titleLbl = new Label(title);
-        titleLbl.setFont(Font.font("Arial", FontWeight.BOLD, 16));
-        titleLbl.setTextFill(Color.web(color));
-
-        Label descLbl = new Label(desc);
-        descLbl.setFont(Font.font("Arial", 11));
-        descLbl.setTextFill(Color.web("#7f8c8d"));
-
-        btn.getChildren().addAll(iconLbl, titleLbl, descLbl);
-
-        // Hover effect
-        btn.setOnMouseEntered(e -> btn.setStyle("-fx-background-color: " + color + "; -fx-background-radius: 12; "
-                                              + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 15, 0, 0, 6); -fx-cursor: hand;"));
-        btn.setOnMouseExited(e -> btn.setStyle("-fx-background-color: white; -fx-background-radius: 12; "
-                                             + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 4); -fx-cursor: hand;"));
-
-        btn.setOnMouseClicked(e -> action.run());
-
+        btn.setGraphic(layout);
         return btn;
     }
 
-    private void openProducts(Stage stage) {
-        System.out.println("Loading inventory datasets securely...");
+    private AreaChart<Number, Number> buildBusinessChart() {
+        NumberAxis xAxis = new NumberAxis(1, 12, 1);
+        NumberAxis yAxis = new NumberAxis(10000, 120000, 20000);
+        AreaChart<Number, Number> chart = new AreaChart<>(xAxis, yAxis);
+        chart.setPrefHeight(260);
+        chart.setLegendVisible(false);
 
-        // 1. Spin up a background thread so the dashboard doesn't freeze
-        new Thread(() -> {
-            ProductDAO productDAO = new ProductDAO();
+        XYChart.Series<Number, Number> series = new XYChart.Series<>();
+        series.getData().add(new XYChart.Data<>(1, 30000));
+        series.getData().add(new XYChart.Data<>(4, 65000));
+        series.getData().add(new XYChart.Data<>(8, 50000));
+        series.getData().add(new XYChart.Data<>(12, 110000));
 
-            // This slow database query runs in the background lane:
-            List<Product> products = productDAO.getAllProducts();
-
-            // 2. Use Platform.runLater to hop back to the UI thread to open the new window
-            javafx.application.Platform.runLater(() -> {
-                // For this option, your ProductManagementController constructor
-                // must accept both the user and the list: public ProductManagementController(User u, List<Product> p)
-                ProductManagementController pm = new ProductManagementController(currentUser, products);
-                pm.show(stage);
-            });
-        }).start();
-    }
-
-    private void showAlert(String title, String msg) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(msg + "\n\nThis feature will be available in Phase 4.");
-        alert.showAndWait();
+        chart.getData().add(series);
+        return chart;
     }
 }

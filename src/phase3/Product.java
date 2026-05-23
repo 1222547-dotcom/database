@@ -14,7 +14,7 @@ public class Product {
     private final DoubleProperty sellingPrice;
     private final IntegerProperty supplierId;
     private final StringProperty supplierName;
-    
+
     public Product() {
         this.productId = new SimpleIntegerProperty();
         this.productName = new SimpleStringProperty();
@@ -28,7 +28,7 @@ public class Product {
         this.supplierId = new SimpleIntegerProperty();
         this.supplierName = new SimpleStringProperty();
     }
-    
+
     public int getProductId() { return productId.get(); }
     public String getProductName() { return productName.get(); }
     public String getBrand() { return brand.get(); }
@@ -40,7 +40,7 @@ public class Product {
     public double getSellingPrice() { return sellingPrice.get(); }
     public int getSupplierId() { return supplierId.get(); }
     public String getSupplierName() { return supplierName.get(); }
-    
+
     public void setProductId(int v) { productId.set(v); }
     public void setProductName(String v) { productName.set(v); }
     public void setBrand(String v) { brand.set(v); }
@@ -52,7 +52,7 @@ public class Product {
     public void setSellingPrice(double v) { sellingPrice.set(v); }
     public void setSupplierId(int v) { supplierId.set(v); }
     public void setSupplierName(String v) { supplierName.set(v); }
-    
+
     public IntegerProperty productIdProperty() { return productId; }
     public StringProperty productNameProperty() { return productName; }
     public StringProperty brandProperty() { return brand; }

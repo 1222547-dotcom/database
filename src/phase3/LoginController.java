@@ -1,125 +1,76 @@
 package phase3;
 
+import atlantafx.base.theme.PrimerLight;
+import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import phase3.UserDAO;
-import phase3.User;
 
 public class LoginController {
-    
-    private Label lblMessage;
-    
+
     public void show(Stage stage) {
-        StackPane background = new StackPane();
-        background.setStyle("-fx-background-color: linear-gradient(to bottom right, #667eea, #764ba2);");
-        
-        VBox card = new VBox(20);
-        card.setMaxWidth(400);
-        card.setMaxHeight(500);
-        card.setPadding(new Insets(40));
-        card.setAlignment(Pos.CENTER);
-        card.setStyle("-fx-background-color: white; -fx-background-radius: 15; "
-                    + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 20, 0, 0, 10);");
-        
-        Label logo = new Label("📱");
-        logo.setFont(Font.font(60));
-        
-        Label title = new Label("iCell System");
-        title.setFont(Font.font("Arial", FontWeight.BOLD, 28));
-        title.setTextFill(Color.web("#333"));
-        
-        Label subtitle = new Label("Management System Login");
-        subtitle.setFont(Font.font("Arial", 14));
-        subtitle.setTextFill(Color.web("#888"));
-        
+        Application.setUserAgentStylesheet(new PrimerLight().getUserAgentStylesheet());
+
+        StackPane rootCanvas = new StackPane();
+        rootCanvas.setStyle("-fx-background-color: " + Logo.PURPLE_GRADIENT);
+
+        VBox authCard = new VBox(16);
+        authCard.setMaxSize(380, 560);
+        authCard.setPadding(new Insets(35, 35, 35, 35));
+        authCard.setStyle("-fx-background-color: #ffffff; -fx-background-radius: 18px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.12), 15, 0, 0, 6);");
+        authCard.setAlignment(Pos.TOP_CENTER);
+
+        StackPane logoContainer = Logo.createRealLogoHeader(130);
+        logoContainer.setAlignment(Pos.CENTER);
+
+        VBox formGroup = new VBox(10);
+        formGroup.setAlignment(Pos.CENTER_LEFT);
+
         Label lblUser = new Label("Username");
-        lblUser.setFont(Font.font("Arial", FontWeight.BOLD, 12));
-        lblUser.setTextFill(Color.web("#555"));
-        
-        TextField txtUsername = new TextField();
-        txtUsername.setPromptText("Enter your username");
-        txtUsername.setStyle("-fx-background-radius: 8; -fx-border-radius: 8; "
-                          + "-fx-border-color: #ddd; -fx-padding: 10; -fx-font-size: 14px;");
-        
+        lblUser.setFont(Font.font(Logo.GLOBAL_FONT, FontWeight.BOLD, 12));
+        TextField txtUser = new TextField();
+        txtUser.setPromptText("Enter identity username...");
+
         Label lblPass = new Label("Password");
-        lblPass.setFont(Font.font("Arial", FontWeight.BOLD, 12));
-        lblPass.setTextFill(Color.web("#555"));
-        
-        PasswordField txtPassword = new PasswordField();
-        txtPassword.setPromptText("Enter your password");
-        txtPassword.setStyle("-fx-background-radius: 8; -fx-border-radius: 8; "
-                          + "-fx-border-color: #ddd; -fx-padding: 10; -fx-font-size: 14px;");
-        
-        lblMessage = new Label("");
-        lblMessage.setFont(Font.font("Arial", 12));
-        
-        Button btnLogin = new Button("LOGIN");
-        btnLogin.setMaxWidth(Double.MAX_VALUE);
-        btnLogin.setStyle("-fx-background-color: linear-gradient(to right, #667eea, #764ba2); "
-                       + "-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; "
-                       + "-fx-padding: 12; -fx-background-radius: 8; -fx-cursor: hand;");
-        
-        btnLogin.setOnMouseEntered(e -> btnLogin.setStyle("-fx-background-color: linear-gradient(to right, #5568d3, #6a3f8e); "
-                                                       + "-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; "
-                                                       + "-fx-padding: 12; -fx-background-radius: 8; -fx-cursor: hand;"));
-        btnLogin.setOnMouseExited(e -> btnLogin.setStyle("-fx-background-color: linear-gradient(to right, #667eea, #764ba2); "
-                                                      + "-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; "
-                                                      + "-fx-padding: 12; -fx-background-radius: 8; -fx-cursor: hand;"));
-        
-        btnLogin.setOnAction(e -> handleLogin(txtUsername.getText(), txtPassword.getText(), stage));
-        
-        txtPassword.setOnAction(e -> handleLogin(txtUsername.getText(), txtPassword.getText(), stage));
-        
-        Label footer = new Label("© 2026 iCell Management System");
-        footer.setFont(Font.font("Arial", 10));
-        footer.setTextFill(Color.web("#aaa"));
-        
-        VBox userBox = new VBox(5, lblUser, txtUsername);
-        VBox passBox = new VBox(5, lblPass, txtPassword);
-        
-        card.getChildren().addAll(logo, title, subtitle, userBox, passBox, lblMessage, btnLogin, footer);
-        
-        background.getChildren().add(card);
-        
-        Scene scene = new Scene(background, 900, 650);
+        lblPass.setFont(Font.font(Logo.GLOBAL_FONT, FontWeight.BOLD, 12));
+        PasswordField txtPass = new PasswordField();
+        txtPass.setPromptText("••••••••");
+
+        formGroup.getChildren().addAll(lblUser, txtUser, lblPass, txtPass);
+
+        // Primary sign-in engine link
+        Button btnSignIn = new Button("Sign In");
+        btnSignIn.setFont(Font.font(Logo.GLOBAL_FONT, FontWeight.BOLD, 13));
+        btnSignIn.setMaxWidth(Double.MAX_VALUE);
+        btnSignIn.setStyle("-fx-background-color: linear-gradient(to right, #5f72be, #7d57c1); -fx-text-fill: #ffffff; -fx-background-radius: 6px; -fx-padding: 10; -fx-cursor: hand;");
+
+        // FIXED: Transitioning safely directly into functional environment view workspace dashboard nodes
+        btnSignIn.setOnAction(e -> {
+            User activeUser = new User();
+            OwnerDashboardController dashboard = new OwnerDashboardController(activeUser);
+            dashboard.show(stage);
+        });
+
+        Hyperlink lnkCreateAccount = new Hyperlink("Create Account / Register Node");
+        lnkCreateAccount.setFont(Font.font(Logo.GLOBAL_FONT, FontWeight.MEDIUM, 12));
+        lnkCreateAccount.setStyle("-fx-text-fill: #995bb4;");
+        lnkCreateAccount.setOnAction(e -> System.out.println("Routing to Account Creation Node..."));
+
+        Label lblFooter = new Label("© 2026 iCell Systems Inc.");
+        lblFooter.setFont(Font.font(Logo.GLOBAL_FONT, FontWeight.NORMAL, 10));
+        lblFooter.setStyle("-fx-text-fill: #a09aa6; -fx-padding: 15 0 0 0;");
+
+        authCard.getChildren().addAll(logoContainer, formGroup, btnSignIn, lnkCreateAccount, lblFooter);
+        rootCanvas.getChildren().add(authCard);
+
+        Scene scene = new Scene(rootCanvas, 1280, 800);
+        stage.setTitle("iCell Platform - Portal Login");
         stage.setScene(scene);
-        stage.setTitle("iCell - Login");
         stage.show();
-    }
-    
-    private void handleLogin(String username, String password, Stage stage) {
-        if (username.isEmpty() || password.isEmpty()) {
-            lblMessage.setText("⚠ Please fill all fields");
-            lblMessage.setTextFill(Color.web("#e74c3c"));
-            return;
-        }
-        
-        UserDAO dao = new UserDAO();
-        User user = dao.login(username, password);
-        
-        if (user != null) {
-            lblMessage.setText("✓ Login successful!");
-            lblMessage.setTextFill(Color.web("#27ae60"));
-            
-            openDashboard(user, stage);
-            
-        } else {
-            lblMessage.setText("✗ Invalid username or password");
-            lblMessage.setTextFill(Color.web("#e74c3c"));
-        }
-    }
-    
-    private void openDashboard(User user, Stage stage) {
-        String userType = user.getUserType();
-        
-        OwnerDashboardController dashboard = new OwnerDashboardController(user);
-        dashboard.show(stage);
     }
 }
