@@ -2,7 +2,6 @@ package phase3;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import phase3.LoginController;
 
 public class main extends Application {
     
