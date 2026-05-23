@@ -1,28 +1,33 @@
 package phase3;
 
-import phase3.DBConn;
 import phase3.DBConfig;
 import phase3.User;
 import java.sql.*;
 
 public class UserDAO {
-    
+
     public User login(String username, String password) {
         Connection con = null;
-        
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
         try {
-            DBConn a = new DBConn(DBConfig.URL, DBConfig.PORT, DBConfig.DB_NAME,
-                                   DBConfig.DB_USERNAME, DBConfig.DB_PASSWORD);
-            con = a.connectDB();
-            System.out.println("Connection established");
-            
+            con = DBConfig.getConnection();
+
+            if (con == null) {
+                System.out.println("Login error: Could not establish a database connection with either password.");
+                return null;
+            }
+
+            System.out.println("Connection established successfully!");
+
             String SQL = "SELECT * FROM User WHERE Username = ? AND Password = ?";
-            PreparedStatement pstmt = con.prepareStatement(SQL);
+            pstmt = con.prepareStatement(SQL);
             pstmt.setString(1, username);
             pstmt.setString(2, password);
-            
-            ResultSet rs = pstmt.executeQuery();
-            
+
+            rs = pstmt.executeQuery();
+
             if (rs.next()) {
                 User user = new User();
                 user.setUserId(rs.getInt("User_ID"));
@@ -32,23 +37,27 @@ public class UserDAO {
                 user.setEmail(rs.getString("Email"));
                 user.setUserType(rs.getString("User_Type"));
                 user.setAccessLevel(rs.getInt("Access_Level"));
-                
-                rs.close();
-                pstmt.close();
-                con.close();
-                System.out.println("Connection closed");
+
+                System.out.println("Login successful for user: " + username);
                 return user;
             }
-            
-            rs.close();
-            pstmt.close();
-            con.close();
-            
-        } catch (ClassNotFoundException | SQLException e) {
-            System.out.println("Login error: " + e.getMessage());
+
+        } catch (SQLException e) {
+            System.out.println("Login database query error: " + e.getMessage());
             e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (pstmt != null) pstmt.close();
+                if (con != null) {
+                    con.close();
+                    System.out.println("Connection safely closed");
+                }
+            } catch (SQLException ex) {
+                System.out.println("Error while closing database resources: " + ex.getMessage());
+            }
         }
-        
+
         return null;
     }
 }

@@ -23,9 +23,9 @@ public class DBConn {
     }
     
     public Connection connectDB() throws ClassNotFoundException, SQLException {
-        
-        dbURL = "jdbc:mysql://" + URL + ":" + port + "/" + dbName + "?verifyServerCertificate=false";
-        
+
+        dbURL = "jdbc:mysql://" + URL + ":" + port + "/" + dbName + "?verifyServerCertificate=false&allowPublicKeyRetrieval=true";
+
         Properties p = new Properties();
         p.setProperty("user", dbUsername);
         p.setProperty("password", dbPassword);

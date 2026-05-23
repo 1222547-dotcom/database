@@ -1,4 +1,3 @@
--- إنشاء قاعدة البيانات
 CREATE DATABASE IF NOT EXISTS iCell_DB;
 USE iCell_DB;
 
