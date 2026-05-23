@@ -13,7 +13,6 @@ public class main extends Application {
         primaryStage = stage;
         primaryStage.setTitle("iCell Management System");
         
-        // ابدأ بشاشة تسجيل الدخول
         LoginController login = new LoginController();
         login.show(primaryStage);
     }
