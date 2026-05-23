@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -55,7 +56,6 @@ public class OwnerDashboardController {
         VBox scrollContainer = new VBox(30);
         scrollContainer.setPadding(new Insets(30));
 
-        // RESTORED: Main dashboard summary envelope color configuration matches login view
         VBox dataAnalysisEnvelope = new VBox(15);
         dataAnalysisEnvelope.setPadding(new Insets(24));
         dataAnalysisEnvelope.setStyle("-fx-background-color: " + Logo.PURPLE_GRADIENT + " -fx-background-radius: 18px;");
@@ -104,19 +104,28 @@ public class OwnerDashboardController {
         routingGrid.setHgap(15);
         routingGrid.setVgap(15);
 
+        // Active Product Link
         Button btnProductCatalog = createModuleMenuButton("Product Catalog", "Trace stock updates and ledger metrics");
-
-        // FIXED: Click behavior immediately loads live database collections upon moving views
         btnProductCatalog.setOnAction(e -> {
             ProductDAO dao = new ProductDAO();
             ProductManagementController prodView = new ProductManagementController(currentSessionUser, dao.getAllProducts());
             prodView.show(stage);
         });
 
+        // FIXED: Re-implemented clear Alert popup warnings for future Phase 4 assignments
+        Button btnStaffClearances = createModuleMenuButton("Staff Clearances", "Manage secure profile access parameters");
+        btnStaffClearances.setOnAction(e -> showPhase4Alert("Staff Clearances"));
+
+        Button btnBillingSheets = createModuleMenuButton("Billing Sheets", "Generate wholesale invoice distribution logs");
+        btnBillingSheets.setOnAction(e -> showPhase4Alert("Billing Sheets"));
+
+        Button btnDepotDependencies = createModuleMenuButton("Depot Dependencies", "Monitor storage network nodes and locations");
+        btnDepotDependencies.setOnAction(e -> showPhase4Alert("Depot Dependencies"));
+
         routingGrid.add(btnProductCatalog, 0, 0);
-        routingGrid.add(createModuleMenuButton("Staff Clearances", "Manage secure profile access parameters"), 1, 0);
-        routingGrid.add(createModuleMenuButton("Billing Sheets", "Generate wholesale invoice distribution logs"), 2, 0);
-        routingGrid.add(createModuleMenuButton("Depot Dependencies", "Monitor storage network nodes and locations"), 3, 0);
+        routingGrid.add(btnStaffClearances, 1, 0);
+        routingGrid.add(btnBillingSheets, 2, 0);
+        routingGrid.add(btnDepotDependencies, 3, 0);
 
         for(int i=0; i<4; i++) {
             ColumnConstraints cc = new ColumnConstraints(); cc.setPercentWidth(25);
@@ -132,6 +141,14 @@ public class OwnerDashboardController {
         Scene scene = new Scene(coreLayout, 1400, 880);
         stage.setScene(scene);
         stage.show();
+    }
+
+    private void showPhase4Alert(String featureName) {
+        Alert infoPopup = new Alert(Alert.AlertType.INFORMATION);
+        infoPopup.setTitle("System Feature Notice");
+        infoPopup.setHeaderText(featureName + " Status");
+        infoPopup.setContentText("This feature is under development and will be ready in Phase 4!");
+        infoPopup.showAndWait();
     }
 
     private VBox createSummaryBullet(String topHeader, String mainValue, String subIndicator) {

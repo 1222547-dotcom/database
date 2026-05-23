@@ -6,6 +6,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -43,17 +44,28 @@ public class LoginController {
 
         formGroup.getChildren().addAll(lblUser, txtUser, lblPass, txtPass);
 
-        // Primary sign-in engine link
         Button btnSignIn = new Button("Sign In");
         btnSignIn.setFont(Font.font(Logo.GLOBAL_FONT, FontWeight.BOLD, 13));
         btnSignIn.setMaxWidth(Double.MAX_VALUE);
         btnSignIn.setStyle("-fx-background-color: linear-gradient(to right, #5f72be, #7d57c1); -fx-text-fill: #ffffff; -fx-background-radius: 6px; -fx-padding: 10; -fx-cursor: hand;");
 
-        // FIXED: Transitioning safely directly into functional environment view workspace dashboard nodes
+        // Action definition block
         btnSignIn.setOnAction(e -> {
             User activeUser = new User();
             OwnerDashboardController dashboard = new OwnerDashboardController(activeUser);
             dashboard.show(stage);
+        });
+
+        // FIXED: Pressing Enter on either text input field fires the Sign In routine action
+        txtUser.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                btnSignIn.fire();
+            }
+        });
+        txtPass.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                btnSignIn.fire();
+            }
         });
 
         Hyperlink lnkCreateAccount = new Hyperlink("Create Account / Register Node");
