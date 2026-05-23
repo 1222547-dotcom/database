@@ -6,3 +6,4 @@
   </deploy>
   <signjar/>
 </anttasks:AntTask>
+implementation 'io.github.mkpaz:atlantafx-base:2.0.1'

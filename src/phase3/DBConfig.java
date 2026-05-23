@@ -1,34 +1,34 @@
 package phase3;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class DBConfig {
 
-    public static final String URL = "127.0.0.1";
-    public static final String PORT = "3306";
-    public static final String DB_NAME = "iCell_DB";
-    public static final String DB_USERNAME = "root";
-    public static final String DB_PASSWORD1 = "0000";
-    public static final String DB_PASSWORD2 = "246810";
+    private static final String URL = "jdbc:mysql://localhost:3306/icell_db";
+    private static final String USER = "root";
 
-    public static Connection getConnection() {
-           try {
-            DBConn db = new DBConn(URL, PORT, DB_NAME, DB_USERNAME, DB_PASSWORD1);
-            Connection conn = db.connectDB();
-            if (conn != null) {
-                return conn;
+    private static final String[] TEST_PASSWORDS = {"0000", "246810"};
+
+    private static String cachedPassword = null;
+
+    public static Connection getConnection() throws SQLException {
+        if (cachedPassword != null) {
+            return DriverManager.getConnection(URL, USER, cachedPassword);
+        }
+
+        for (String password : TEST_PASSWORDS) {
+            try {
+                Connection conn = DriverManager.getConnection(URL, USER, password);
+                if (conn != null) {
+                    cachedPassword = password;
+                    return conn;
+                }
+            } catch (SQLException e) {
             }
-        } catch (Exception e) {
-            System.out.println("First password attempt failed, trying fallback password...");
         }
 
-        try {
-            DBConn db = new DBConn(URL, PORT, DB_NAME, DB_USERNAME, DB_PASSWORD2);
-            return db.connectDB();
-        } catch (Exception e) {
-            System.out.println("Database connection error on both passwords: " + e.getMessage());
-            e.printStackTrace();
-            return null;
-        }
+        throw new SQLException("Database connection failed: Unable to verify credentials.");
     }
 }
