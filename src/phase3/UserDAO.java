@@ -11,8 +11,7 @@ public class UserDAO {
         Connection con = null;
         
         try {
-            // الاتصال بطريقة الدكتور
-            DBConn a = new DBConn(DBConfig.URL, DBConfig.PORT, DBConfig.DB_NAME, 
+            DBConn a = new DBConn(DBConfig.URL, DBConfig.PORT, DBConfig.DB_NAME,
                                    DBConfig.DB_USERNAME, DBConfig.DB_PASSWORD);
             con = a.connectDB();
             System.out.println("Connection established");

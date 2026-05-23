@@ -29,7 +29,6 @@ public class Product {
         this.supplierName = new SimpleStringProperty();
     }
     
-    // Getters
     public int getProductId() { return productId.get(); }
     public String getProductName() { return productName.get(); }
     public String getBrand() { return brand.get(); }
@@ -42,7 +41,6 @@ public class Product {
     public int getSupplierId() { return supplierId.get(); }
     public String getSupplierName() { return supplierName.get(); }
     
-    // Setters
     public void setProductId(int v) { productId.set(v); }
     public void setProductName(String v) { productName.set(v); }
     public void setBrand(String v) { brand.set(v); }
@@ -55,7 +53,6 @@ public class Product {
     public void setSupplierId(int v) { supplierId.set(v); }
     public void setSupplierName(String v) { supplierName.set(v); }
     
-    // Properties (for TableView)
     public IntegerProperty productIdProperty() { return productId; }
     public StringProperty productNameProperty() { return productName; }
     public StringProperty brandProperty() { return brand; }

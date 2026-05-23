@@ -27,7 +27,6 @@ public class ProductManagementController {
     private ObservableList<Product> productList;
     private List<String[]> suppliers;
     
-    // Form fields
     private TextField txtName, txtModel, txtColor, txtRam, txtStorage, txtPurchase, txtSelling;
     private ComboBox<String> cmbBrand, cmbSupplier;
     private TextField txtSearch;
@@ -43,7 +42,6 @@ public class ProductManagementController {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: #f5f6fa;");
         
-        // ===== Header =====
         HBox header = new HBox();
         header.setPadding(new Insets(20, 30, 20, 30));
         header.setAlignment(Pos.CENTER_LEFT);
@@ -64,15 +62,12 @@ public class ProductManagementController {
         
         header.getChildren().addAll(btnBack, title);
         
-        // ===== Center: Split into Form (Left) + Table (Right) =====
         HBox centerBox = new HBox(20);
         centerBox.setPadding(new Insets(20));
         
-        // ----- Left: Form -----
         VBox formBox = createForm();
         formBox.setPrefWidth(350);
-        
-        // ----- Right: Table + Search -----
+
         VBox tableBox = createTableSection();
         HBox.setHgrow(tableBox, Priority.ALWAYS);
         
@@ -85,8 +80,7 @@ public class ProductManagementController {
         stage.setScene(scene);
         stage.setTitle("iCell - Product Management");
         stage.show();
-        
-        // تحميل المنتجات
+
         loadProducts();
         loadSuppliers();
     }

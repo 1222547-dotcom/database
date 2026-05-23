@@ -14,7 +14,6 @@ public class DBConn {
     private String port;
     private String dbName;
     
-    // Constructor
     public DBConn(String URL, String port, String dbName, String dbUsername, String dbPassword) {
         this.URL = URL;
         this.port = port;
@@ -23,7 +22,6 @@ public class DBConn {
         this.dbPassword = dbPassword;
     }
     
-    // دالة الاتصال
     public Connection connectDB() throws ClassNotFoundException, SQLException {
         
         dbURL = "jdbc:mysql://" + URL + ":" + port + "/" + dbName + "?verifyServerCertificate=false";

@@ -9,7 +9,6 @@ import java.util.List;
 
 public class ProductDAO {
     
-    // قراءة كل المنتجات (مع اسم المورد)
     public List<Product> getAllProducts() {
         List<Product> products = new ArrayList<>();
         Connection con = null;
@@ -56,7 +55,6 @@ public class ProductDAO {
         return products;
     }
     
-    // إضافة منتج جديد
     public boolean addProduct(Product p) {
         Connection con = null;
         
@@ -93,7 +91,6 @@ public class ProductDAO {
         }
     }
     
-    // تحديث منتج
     public boolean updateProduct(Product p) {
         Connection con = null;
         
@@ -131,7 +128,6 @@ public class ProductDAO {
         }
     }
     
-    // حذف منتج
     public boolean deleteProduct(int productId) {
         Connection con = null;
         
@@ -159,7 +155,6 @@ public class ProductDAO {
         }
     }
     
-    // بحث
     public List<Product> searchProducts(String keyword) {
         List<Product> products = new ArrayList<>();
         Connection con = null;
@@ -207,7 +202,6 @@ public class ProductDAO {
         return products;
     }
     
-    // قائمة الموردين (للـ ComboBox)
     public List<String[]> getSuppliers() {
         List<String[]> suppliers = new ArrayList<>();
         Connection con = null;

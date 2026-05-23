@@ -17,11 +17,9 @@ public class LoginController {
     private Label lblMessage;
     
     public void show(Stage stage) {
-        // الخلفية المتدرجة
         StackPane background = new StackPane();
         background.setStyle("-fx-background-color: linear-gradient(to bottom right, #667eea, #764ba2);");
         
-        // البطاقة البيضاء
         VBox card = new VBox(20);
         card.setMaxWidth(400);
         card.setMaxHeight(500);
@@ -30,11 +28,9 @@ public class LoginController {
         card.setStyle("-fx-background-color: white; -fx-background-radius: 15; "
                     + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 20, 0, 0, 10);");
         
-        // الشعار
         Label logo = new Label("📱");
         logo.setFont(Font.font(60));
         
-        // العنوان
         Label title = new Label("iCell System");
         title.setFont(Font.font("Arial", FontWeight.BOLD, 28));
         title.setTextFill(Color.web("#333"));
@@ -43,7 +39,6 @@ public class LoginController {
         subtitle.setFont(Font.font("Arial", 14));
         subtitle.setTextFill(Color.web("#888"));
         
-        // حقل Username
         Label lblUser = new Label("Username");
         lblUser.setFont(Font.font("Arial", FontWeight.BOLD, 12));
         lblUser.setTextFill(Color.web("#555"));
@@ -53,7 +48,6 @@ public class LoginController {
         txtUsername.setStyle("-fx-background-radius: 8; -fx-border-radius: 8; "
                           + "-fx-border-color: #ddd; -fx-padding: 10; -fx-font-size: 14px;");
         
-        // حقل Password
         Label lblPass = new Label("Password");
         lblPass.setFont(Font.font("Arial", FontWeight.BOLD, 12));
         lblPass.setTextFill(Color.web("#555"));
@@ -63,18 +57,15 @@ public class LoginController {
         txtPassword.setStyle("-fx-background-radius: 8; -fx-border-radius: 8; "
                           + "-fx-border-color: #ddd; -fx-padding: 10; -fx-font-size: 14px;");
         
-        // رسالة
         lblMessage = new Label("");
         lblMessage.setFont(Font.font("Arial", 12));
         
-        // زر تسجيل الدخول
         Button btnLogin = new Button("LOGIN");
         btnLogin.setMaxWidth(Double.MAX_VALUE);
         btnLogin.setStyle("-fx-background-color: linear-gradient(to right, #667eea, #764ba2); "
                        + "-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; "
                        + "-fx-padding: 12; -fx-background-radius: 8; -fx-cursor: hand;");
         
-        // تأثير hover
         btnLogin.setOnMouseEntered(e -> btnLogin.setStyle("-fx-background-color: linear-gradient(to right, #5568d3, #6a3f8e); "
                                                        + "-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; "
                                                        + "-fx-padding: 12; -fx-background-radius: 8; -fx-cursor: hand;"));
@@ -82,18 +73,14 @@ public class LoginController {
                                                       + "-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; "
                                                       + "-fx-padding: 12; -fx-background-radius: 8; -fx-cursor: hand;"));
         
-        // action الزر
         btnLogin.setOnAction(e -> handleLogin(txtUsername.getText(), txtPassword.getText(), stage));
         
-        // Enter key
         txtPassword.setOnAction(e -> handleLogin(txtUsername.getText(), txtPassword.getText(), stage));
         
-        // Footer
         Label footer = new Label("© 2026 iCell Management System");
         footer.setFont(Font.font("Arial", 10));
         footer.setTextFill(Color.web("#aaa"));
         
-        // VBox للحقول
         VBox userBox = new VBox(5, lblUser, txtUsername);
         VBox passBox = new VBox(5, lblPass, txtPassword);
         
@@ -121,7 +108,6 @@ public class LoginController {
             lblMessage.setText("✓ Login successful!");
             lblMessage.setTextFill(Color.web("#27ae60"));
             
-            // افتح الـ dashboard المناسب حسب الـ User_Type
             openDashboard(user, stage);
             
         } else {
@@ -133,8 +119,6 @@ public class LoginController {
     private void openDashboard(User user, Stage stage) {
         String userType = user.getUserType();
         
-        // كلهم رح يستخدموا نفس الـ Dashboard للـ Prototype
-        // لكن ممكن لاحقاً يكون لكل واحد dashboard مختلف
         OwnerDashboardController dashboard = new OwnerDashboardController(user);
         dashboard.show(stage);
     }

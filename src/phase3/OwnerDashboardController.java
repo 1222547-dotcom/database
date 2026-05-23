@@ -23,7 +23,6 @@ public class OwnerDashboardController {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: #f5f6fa;");
         
-        // ===== Top Header =====
         HBox header = new HBox();
         header.setPadding(new Insets(20, 30, 20, 30));
         header.setAlignment(Pos.CENTER_LEFT);
@@ -50,7 +49,6 @@ public class OwnerDashboardController {
         
         header.getChildren().addAll(headerTitle, spacer, userInfo, new Label("  "), btnLogout);
         
-        // ===== Main Content =====
         ScrollPane scroll = new ScrollPane();
         scroll.setFitToWidth(true);
         scroll.setStyle("-fx-background: #f5f6fa; -fx-background-color: #f5f6fa;");
@@ -58,8 +56,7 @@ public class OwnerDashboardController {
         VBox content = new VBox(25);
         content.setPadding(new Insets(30));
         
-        // Welcome
-        Label welcome = new Label("Welcome back, " + 
+        Label welcome = new Label("Welcome back, " +
             (currentUser.getFullName().trim().isEmpty() ? currentUser.getUsername() : currentUser.getFullName()) + "! 👋");
         welcome.setFont(Font.font("Arial", FontWeight.BOLD, 26));
         welcome.setTextFill(Color.web("#2c3e50"));
@@ -68,7 +65,6 @@ public class OwnerDashboardController {
         subtitle.setFont(Font.font("Arial", 14));
         subtitle.setTextFill(Color.web("#7f8c8d"));
         
-        // ===== Statistics Cards =====
         Label statsTitle = new Label("📊 Statistics Overview");
         statsTitle.setFont(Font.font("Arial", FontWeight.BOLD, 18));
         statsTitle.setTextFill(Color.web("#2c3e50"));
@@ -81,7 +77,6 @@ public class OwnerDashboardController {
             createStatCard("⚠️", "Low Stock", "3 Items", "#e74c3c")
         );
         
-        // ===== Main Menu =====
         Label menuTitle = new Label("🎯 Main Menu");
         menuTitle.setFont(Font.font("Arial", FontWeight.BOLD, 18));
         menuTitle.setTextFill(Color.web("#2c3e50"));

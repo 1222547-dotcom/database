@@ -10,7 +10,6 @@ public class DBConfig {
     public static final String DB_USERNAME = "root";
     public static final String DB_PASSWORD = "0000";
     
-    // دالة مساعدة لإنشاء اتصال
     public static Connection getConnection() {
         try {
             DBConn db = new DBConn(URL, PORT, DB_NAME, DB_USERNAME, DB_PASSWORD);
